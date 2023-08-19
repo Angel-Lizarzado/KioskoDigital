@@ -1,0 +1,82 @@
+{% extends "admin/base.html" %}
+{% block title%} Registrar usuarios | {% endblock %}
+{% block registrarUsuarios %}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h2 class="page-title">Registrar usuarios  </h2>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Codigos de registro</h2>
+                        <form method="post" action="{{ url_for('registrar_codigo') }}">
+                            <button type="submit" class="btn btn-primary">Crear Nuevo Código</button>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Código</th>
+                                        <th>Creado</th>
+                                        <th>Fecha</th>
+                                        <th>Disponibilidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for code in codes %}
+                                    <tr>
+                                        <td>{{ code[0] }}</td>
+                                        <td>{{ code[1] }}</td>
+                                        <td>{{ code[2] }}</td>
+                                        <td>{{ code[3] }}</td>
+                                        <td class="text-center">
+                                            <span style="padding: 5px 10px; border-radius: 4px; color: #fff; background-color: {% if code[4] == 'no disponible' %}#dc3545{% else %}#28a745{% endif %}">
+                                                {% if code[4] == 'no disponible' %}No disponible{% else %}Disponible{% endif %}
+                                            </span>
+                                        </td>
+                                        
+                                        
+                                        
+                                        
+                                        <td>
+                                            <button class="btn btn-primary" onclick="copyCode('{{ code[1] }}')">Copiar código</button>
+                                        </td>
+                                        <td>
+                                            <form method="post" action="{{ url_for('borrar_codigo', codigo_id=code[0]) }}">
+                                                <button type="submit" class="btn btn-danger">Borrar codigo</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                
+                                <script>
+                                function copyCode(code) {
+                                    const textarea = document.createElement('textarea');
+                                    textarea.value = code;
+                                    document.body.appendChild(textarea);
+                                    textarea.select();
+                                    document.execCommand('copy');
+                                    document.body.removeChild(textarea);
+                                    alert('Código copiado al portapapeles: ' + code);
+                                }
+                                </script>
+
+                            </table>
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "admin/base.html" %}
+{% block title%} Usuarios registrados | {% endblock %}
+{% block usuariosRegistrados %}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h2 class="page-title">Listado de usuarios registrados  </h2>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Pedidos</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            ID
+                                        </th>
+                                        <th>
+                                            Usuario
+                                        </th>
+                                        <th>
+                                            email
+                                        </th>
+                                        <th>
+                                            rol
+                                        </th>
+                                        <th>
+                                            registrado por
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for usuario in usuarios %}
+                                    <tr>
+                                        <th>{{ usuario[0] }}</th>
+                                        <td>{{ usuario[1] }}</td>
+                                        <td>{{ usuario[2] }}</td>
+                                        <td>{{ usuario[4] }}</td>
+                                        <td>{{ usuario[5] }}</td>
+                                        
+                                        
+                                        <td>
+                                            <form method="post" action="{{ url_for('borrar_usuario', usuario_id=usuario[0]) }}">
+                                                <button type="submit" class="btn btn-danger">Borrar usuario</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

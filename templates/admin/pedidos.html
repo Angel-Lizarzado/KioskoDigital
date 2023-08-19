@@ -1,0 +1,110 @@
+{% extends "admin/base.html" %}
+{% block title%} Pedidos pendientes | {% endblock %}
+{% block pedidos %}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <h2 class="page-title">Listado de productos pendientes</h2>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Pedidos</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Pedido
+                                        </th>
+                                        <th>
+                                            Nombre
+                                        </th>
+                                        <th>
+                                            Telefono
+                                        </th>
+                                        <th>
+                                            Productos
+                                        </th>
+                                        <th>
+                                            Precio total
+                                        </th>
+                                        <th>
+                                            Estado
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pedido in pedidos %}
+                                    <tr>
+                                        <th>{{ pedido[0] }}</th>
+                                        <td>{{ pedido[1] }}</td>
+                                        <td>{{ pedido[2] }}</td>
+                                        <td>
+                                            {{ pedido[3] }}
+                                        </td>
+                                        <td>{{ pedido[4] }}$</td>
+                                        <td>{{ pedido[5] }}</td>
+                                        <td>
+                                            {% if pedido[5] == 'pendiente' %}
+                                                <form method="post" action="{{ url_for('tomar_pedido', pedido_id=pedido[0]) }}">
+                                                    <button type="submit" class="btn btn-info tomar-pedido">Tomar pedido</button>
+                                                </form>
+                                            {% else %}
+                                                {% if pedido[5] == 'Tomado por {}'.format(session['username']) %}
+                                                    <form method="post" action="{{ url_for('confirmar_pedido', pedido_id=pedido[0]) }}">
+                                                        <button type="submit" class="btn btn-success">Confirmar</button>
+                                                    </form>
+                                                {% else %}
+                                                    <p>En proceso</p>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        
+                                        <td>
+                                            {% if pedido[5] == 'Tomado por {}'.format(session['username']) %}
+                                                <!-- Mostrar botón de borrar solo si el pedido ha sido tomado por el usuario en sesión -->
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#borrarPedidoModal{{ pedido[0] }}">Borrar</button>
+                                                <!-- Modal para confirmar el borrado del pedido -->
+                                                <div class="modal fade" id="borrarPedidoModal{{ pedido[0] }}" tabindex="-1" role="dialog" aria-labelledby="borrarPedidoModalLabel{{ pedido[0] }}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="borrarPedidoModalLabel{{ pedido[0] }}">Confirmar Borrado</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Estás seguro de que deseas borrar este pedido?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                <form method="post" action="{{ url_for('borrar_pedido', pedido_id=pedido[0]) }}">
+                                                                    <button type="submit" class="btn btn-danger">Borrar</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

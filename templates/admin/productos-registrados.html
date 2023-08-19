@@ -1,0 +1,231 @@
+{% extends "admin/base.html" %}
+{% block title%} Productos registrados | {% endblock %}
+{% block productosRegistrados %}
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <h2 class="page-title">Productos</h2>
+                <div id="flash-message" class="alert" role="alert"></div>
+
+                <!-- Zero Configuration Table -->
+                <div class="panel panel-default">
+                    <div class="text-center panel-heading">
+                        Lista de productos en tienda
+                        <a href="#" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#agregarProductoModal">Agregar Nuevo Producto</a>
+                    </div>
+                    <div class="panel-body">
+                        <table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titulo</th>
+                                    <th>Categoria</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
+                                    <th>Disponibilidad</th>
+                                    <th>Imagen</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for producto in productos %}
+                                <tr>
+                                    <td>{{ producto[0] }}</td>
+                                    <td>{{ producto[1] }}</td>
+                                    <td>{{ producto[2] }}</td>
+                                    <td>{{ producto[3] }}</td>
+                                    <td>{{ producto[4] }}</td>
+                                    <td class="text-center">
+                                        <span style="padding: 5px 10px; border-radius: 4px; color: #fff; {% if not producto[5] %}background-color: #dc3545{% else %}background-color: #28a745{% endif %}">
+                                            {% if producto[5] %}Disponible{% else %}No disponible{% endif %}
+                                        </span>
+                                    </td>
+                                    
+                                    <td><a class="btn btn-warning"href="#" data-toggle="modal" data-target="#verFotoModal{{ producto[0] }}">Ver Foto</a></td>
+                                    <td>
+                                        <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#editarProductoModal{{ producto[0] }}">Editar</a> /
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmarBorrarModal{{ producto[0] }}">Borrar</button>
+
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Titulo</th>
+                                    <th>Categoria</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
+                                    <th>Disponibilidad</th>
+                                    <th>Imagen</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        
+                        <!-- Modales para ver foto de producto -->
+                        {% for producto in productos %}
+                        <div class="modal fade" id="verFotoModal{{ producto[0] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-center" id="exampleModalLabel">Foto de {{producto[1]}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img src="{{ url_for('static', filename='uploads/' + producto[6]) }}" alt="Foto del producto" style="max-width: 100%;">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="editarProductoModal{{ producto[0] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="/editar_producto/{{ producto[0] }}">
+                                            <!-- Agrega los campos del formulario para editar los detalles del producto -->
+                                            <label for="titulo">Título:</label>
+                                            <input type="text" class="form-control" id="titulo" name="nuevo_titulo" value="{{ producto[1] }}" required>
+                                            <div class="form-group">
+                                                <label for="categoria">Categoría</label>
+                                                <select class="form-control" id="categoria" name="nueva_categoria">
+                                                    {% for categoria in categorias %}
+                                                    <option value="{{ categoria[1] }}">{{ categoria[1] }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="stock">Stock</label>
+                                                <input type="number" class="form-control" id="stock" name="nuevo_stock" value="{{ producto[3] }}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="precio">Precio</label>
+                                                <input type="number" class="form-control" id="precio" name="nuevo_precio" value="{{ producto[4] }}" step="0.01" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="disponibilidad">Disponibilidad</label>
+                                                <select class="form-control" id="disponibilidad" name="nueva_disponibilidad">
+                                                    <option value="1" {% if producto[5] == 1 %}selected{% endif %}>Disponible</option>
+                                                    <option value="0" {% if producto[5] == 0 %}selected{% endif %}>No Disponible</option>
+                                                </select>
+                                            </div>
+                                            <!-- Agrega más campos según tus necesidades -->
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="confirmarBorrarModal{{ producto[0] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <p>¿Estás seguro de que deseas borrar este producto?</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-center text-center">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        <form method="post" action="/borrar_producto/{{ producto[0] }}" style="display: inline-block;">
+                                            <button type="submit" class="btn btn-danger">Borrar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Modal para agregar nuevo producto -->
+                <div class="modal fade" id="agregarProductoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Producto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="agregarProductoForm" enctype="multipart/form-data" action="{{ url_for('registrar_producto') }}" method="POST">
+                                    <div class="form-group">
+                                        <label for="titulo">Título</label>
+                                        <input type="text" class="form-control" id="titulo" name="titulo" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="categoria">Categoría</label>
+                                        <select class="form-control" id="categoria" name="categoria">
+                                            {% for categoria in categorias %}
+                                            <option value="{{ categoria[1] }}">{{ categoria[1] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="stock">Stock</label>
+                                        <input type="number" class="form-control" id="stock" name="stock" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="precio">Precio</label>
+                                        <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="disponibilidad">Disponibilidad</label>
+                                        <select class="form-control" id="disponibilidad" name="disponibilidad">
+                                            <option value="true">Disponible</option>
+                                            <option value="false">No Disponible</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="imagen">Imagen</label>
+                                        <input type="file" class="form-control-file" id="imagen" name="imagen" accept="image/*" required>
+                                        <img id="imagenPreview" src="#" alt="Vista previa de la imagen" style="max-width: 100%; display: none;">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <script>
+                    // Mostrar vista previa de la imagen seleccionada
+                    document.getElementById('imagen').addEventListener('change', function(event) {
+                        var imagenPreview = document.getElementById('imagenPreview');
+                        imagenPreview.style.display = 'block';
+                        imagenPreview.src = URL.createObjectURL(event.target.files[0]);
+                    });
+
+                </script>
+                
+                
+                
+
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin | KioskoLaRedoma</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='fonts/admin/fontawesome-free/css/all.min.css') }}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/adminlte.min.css') }}">
+</head>
+<body class="hold-transition login-page">
+  
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Admin</b><br>KioskoDigital</a>
+  </div>
+  {% block content %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="messages">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            <script>
+                // Ocultar automáticamente el mensaje después de 5 segundos
+                setTimeout(function() {
+                document.querySelector('.messages').style.display = 'none';
+                }, 5000); // 5000 milisegundos (5 segundos)
+            </script>
+            {% endif %}
+        {% endwith %}
+        {% endblock %}
+  <div class="login-box-body">
+    <p class="login-box-msg">Ingresa tus credenciales</p>
+    <form id="login-form" action="/login" method="post">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" name='username'placeholder="Usuario">
+        <div class="input-group-append">
+          <div class="input-group-text">
+            <span class="fas fa-envelope"></span>
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Password">
+        <div class="input-group-append">
+          <div class="input-group-text">
+            <span class="fas fa-lock"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <div class="icheck-primary">
+            <input type="checkbox" id="remember">
+            <label for="remember">
+              Remember Me
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        </div>
+        <!-- /.col -->
+      </div>
+      <p class="mb-0">
+        <a href="#" id="registrar-link">Registrar un nuevo administrador</a>
+      </p>
+    </form>
+    <!-- /.social-auth-links -->
+
+    
+  </div>
+
+  <!-- Registro Form (inicialmente oculto) -->
+  <form action="/registrar" method="post">
+  <div class="login-box-body" id="registro-form" style="display: none;">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" name="username" placeholder="Usuario">
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <span class="fas fa-envelope"></span>
+        </div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <input type="email" class="form-control" name="email" placeholder="Email">
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <span class="fas fa-envelope"></span>
+        </div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <input type="password" class="form-control" name="password" placeholder="Password">
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <span class="fas fa-lock"></span>
+        </div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" name="code" placeholder="Codigo">
+      <div class="input-group-append">
+        <div class="input-group-text">
+          <span class="fas fa-lock"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-8">
+      </div>
+      <!-- /.col -->
+      <div class="col-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button type="submit" class="btn btn-primary btn-block">Registrarme</button>
+      </div>
+      <!-- /.col -->
+    </div>
+  </form>
+  <!-- /.social-auth-links -->
+
+  <p class="mb-0">
+    <a href="#" id="login-link">Volver al inicio de sesión</a>
+  </p>
+</div>
+
+<script>
+  // Cambiar entre el formulario de login y registro al hacer clic en los enlaces
+  const loginForm = document.getElementById('login-form');
+  const registroForm = document.getElementById('registro-form');
+  const registrarLink = document.getElementById('registrar-link');
+  const loginLink = document.getElementById('login-link');
+
+  registrarLink.addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    registroForm.style.display = 'block';
+  });
+
+  loginLink.addEventListener('click', () => {
+    loginForm.style.display = 'block';
+    registroForm.style.display = 'none';
+  });
+</script> 
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='js/admin/adminlte.min.js') }}"></script>
+</body>
+</html>
