@@ -9,7 +9,7 @@ charset-normalizer==3.2.0
 click==8.1.6
 colorama==0.4.6
 cryptography==41.0.2
-Flask==2.2.5
+Flask==2.2.0
 Flask-Cors==4.0.0
 Flask-Dance==7.0.0
 Flask-Login==0.6.2
