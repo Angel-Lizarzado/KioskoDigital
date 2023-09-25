@@ -37,9 +37,10 @@
                                     <td>{{ producto[3] }}</td>
                                     <td>{{ producto[4] }}</td>
                                     <td class="text-center">
-                                        <span style="padding: 5px 10px; border-radius: 4px; color: #fff; {% if not producto[5] %}background-color: #dc3545{% else %}background-color: #28a745{% endif %}">
-                                            {% if producto[5] %}Disponible{% else %}No disponible{% endif %}
-                                        </span>
+                                        <td class="{% if producto[5]|int == 0 %}no-disponible{% else %}disponible{% endif %}">
+                                            {% if producto[5]|int == 0 %}No disponible{% else %}Disponible{% endif %}
+                                        </td>                                        
+                                        
                                     </td>
                                     
                                     <td><a class="btn btn-warning"href="#" data-toggle="modal" data-target="#verFotoModal{{ producto[0] }}">Ver Foto</a></td>
