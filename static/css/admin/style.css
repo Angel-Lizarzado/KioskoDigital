@@ -745,3 +745,23 @@ li {
   height: 100%;
   width: 100%;
 }
+.disponible,
+.no-disponible {
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  font-weight: bold; /* Hacer el texto en negrita para mayor énfasis */
+  margin-right: 5px; /* Agregar espacio entre las etiquetas si es necesario */
+}
+
+.disponible {
+  background-color: #28a745;
+}
+
+.no-disponible {
+  background-color: #dc3545;
+}
