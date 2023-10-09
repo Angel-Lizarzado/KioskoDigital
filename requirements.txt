@@ -14,7 +14,7 @@ Flask-Cors==4.0.0
 Flask-Dance==7.0.0
 Flask-Login==0.6.2
 Flask-Mail==0.9.1
-Flask-OAuthlib==0.9.6
+Flask-OAuthlib==3.0.0
 Flask-WTF==1.1.1
 google-api-core==2.11.1
 google-api-python-client==2.95.0
